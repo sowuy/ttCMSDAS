@@ -3,7 +3,7 @@ basepath = os.path.abspath(__file__).rsplit('/ttCMSDAS/',1)[0]+'/ttCMSDAS/'
 sys.path.append(basepath)
 
 from framework.analysis import analysis
-from framework.functions import DeltaPhi, DiPt, InvMass
+from framework.functions import DeltaPhi, DiPt, InvMass, lepton, jet
 from ROOT.TMath import Sqrt as sqrt
 from ROOT import *
 
@@ -135,11 +135,11 @@ class ttdilepton(analysis):
     ###########################################
     
     ### Dilepton pair: 2 leptons, opposite sign, mll > 20 GeV, leading lep pT > 20 GeV
-    if not len(leps) >= 2: continue
+    if not len(leps) >= 2:      return 
     l0 = leps[0]; l1 = leps[1]
-    if l0.charge*l1.charge > 0: continue 
-    if l0.Pt() < 20: continue
-    if InvMass(l0,l1) < 20: continue
+    if l0.charge*l1.charge > 0: return 
+    if l0.Pt() < 20:            return 
+    if InvMass(l0,l1) < 20:     return  
 
     ### Fill the histograms
-    self.FillHistograms(leps, jets, pmet)
+    self.FillHistograms(self.selLeptons, self.selJets, self.pmet)
