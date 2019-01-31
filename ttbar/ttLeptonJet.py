@@ -91,7 +91,7 @@ class ttLeptonJet(analysis):
       if t.Muon_pfRelIso04_all[i] > 0.15 and t.MET_pt < 20 :
 	self.selLeptons_QCD_noMet.append(lepton(p, charge, 13))
       elif t.Muon_pfRelIso04_all[i] < 0.15 and t.MET_pt < 20 :
-	self.selLeptons__noMet.append(lepton(p, charge, 13))
+	self.selLeptons_noMet.append(lepton(p, charge, 13))
       elif t.Muon_pfRelIso04_all[i] < 0.15 and t.MET_pt > 20 :
       	self.selLeptons.append(lepton(p, charge, 13))
       else:
@@ -179,22 +179,16 @@ class ttLeptonJet(analysis):
     ### One electron or muon and at least 4 jets
     ### veto events with more than one lepton.
     ### veto events containing leptons passing relaxed ID/ISO cuts. 
-    if not len(leps) == 1; 	return
     if not len(selJets)>=4; 	return
      
     l0 = leps[0]
 
     ### Fill the histograms
-    self.FillHistograms(self.selLeptons, self.selJets, self.pmet)
-
-
-    ### QCD selection : non-prompt and less isolated leptons
-	### the control region : isolation cut is reversed 
-    
-	
-
-   self.FillHistograms(self.selLeptons_QCD, self.selJets, self.pmet)
-
-   self.FillHistograms(self.selLeptons_QCD_noMet, self.selJets, self.pmet)
-	
-   self.FillHistograms(self.selLeptons_noMet, self.selJets, self.pmet)
+    if len(leps) == 1:
+	self.FillHistograms(self.selLeptons, self.selJets, self.pmet, "signal")
+    if len(self.selLeptons_noMet) == 1:
+        self.FillHistograms(self.selLeptons_noMet, self.selJets, self.pmet, "signal_noMet")
+    if len(self.selLeptons_QCD) == 1:
+        self.FillHistograms(self.selLeptons_QCD, self.selJets, self.pmet, "qcd")
+    if len(self.selLeptons_QCD_noMet) == 1:
+        self.FillHistograms(self.selLeptons_QCD_noMet, self.selJets, self.pmet,"qcd_noMet")
